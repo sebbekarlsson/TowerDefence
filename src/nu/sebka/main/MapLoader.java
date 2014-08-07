@@ -3,14 +3,16 @@ package nu.sebka.main;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
+import nu.sebka.instances.House;
 import nu.sebka.instances.MobSpawner;
 import nu.sebka.instances.PathPoint;
 import nu.sebka.instances.tiles.DirtTile;
 import nu.sebka.instances.tiles.GrassTile;
+import nu.sebka.scenes.GameScene;
 
 public class MapLoader {
 
-	public static void loadMap(Scene scene, BufferedImage image){
+	public static void loadMap(GameScene scene, BufferedImage image){
 		for(int x = 0; x < image.getWidth(); x++){
 			for(int y = 0; y < image.getHeight(); y++){
 				Color color = new Color(image.getRGB(x, y));
@@ -28,10 +30,17 @@ public class MapLoader {
 					scene.createInstance(new DirtTile(x*32,y*32));
 				}
 				else if(r == 160 && g == 0 && b == 120){
-					scene.createInstance(new MobSpawner(x*32,y*32));
+					MobSpawner ms = new MobSpawner(x*32,y*32);
+					scene.mobspawner = ms;
+					scene.createInstance(ms);
 				}
 				else if(r == 255 && g == 255 && b == 0){
 					scene.createInstance(new PathPoint(x*32,y*32));
+				}
+				else if(r == 255 && g == 190 && b == 0){
+					House h = new House(x*32,y*32);
+					scene.house = h;
+					scene.createInstance(new House(x*32,y*32));
 				}
 				
 			}

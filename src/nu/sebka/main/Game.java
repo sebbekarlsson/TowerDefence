@@ -37,6 +37,8 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	public static boolean[] keys = new boolean[256];
 	public static boolean[] mkeys = new boolean[10];
 	
+	public static int money = 1500;
+	
 
 	public Game(){
 		
@@ -48,7 +50,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(3);
 
-		this.addKeyListener(this);
+		frame.addKeyListener(this);
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 		
