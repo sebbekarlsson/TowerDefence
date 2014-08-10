@@ -7,7 +7,9 @@ public class ZombieMob extends Mob {
 
 	public ZombieMob(double x, double y) {
 		super(x, y);
+		speed = 1;
 		sprite.images.add(ImageLoader.load("/images/mobs/zombie/1.png"));
+		protection = 64;
 	}
 
 }

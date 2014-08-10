@@ -6,13 +6,16 @@ import java.awt.image.BufferedImage;
 import nu.sebka.instances.House;
 import nu.sebka.instances.MobSpawner;
 import nu.sebka.instances.PathPoint;
+import nu.sebka.instances.Tree;
 import nu.sebka.instances.tiles.DirtTile;
 import nu.sebka.instances.tiles.GrassTile;
+import nu.sebka.instances.tiles.GravelTile;
 import nu.sebka.scenes.GameScene;
 
 public class MapLoader {
 
 	public static void loadMap(GameScene scene, BufferedImage image){
+		
 		for(int x = 0; x < image.getWidth(); x++){
 			for(int y = 0; y < image.getHeight(); y++){
 				Color color = new Color(image.getRGB(x, y));
@@ -42,9 +45,17 @@ public class MapLoader {
 					scene.house = h;
 					scene.createInstance(new House(x*32,y*32));
 				}
+				else if(r == 150 && g == 150 && b == 150){
+					scene.createInstance(new GravelTile(x*32,y*32));
+				}
+				else if(r == 0 && g == 80 && b == 40){
+					scene.createInstance(new Tree(x*32,y*32));
+				}
 				
 			}
 		}
+		
+		
 	}
 	
 }

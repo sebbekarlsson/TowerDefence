@@ -17,6 +17,10 @@ public class Scene {
 		
 	}
 	
+	public void defaultTick(){
+		
+	}
+	
 	public void draw(Graphics2D g2d){
 		
 	}
@@ -43,6 +47,8 @@ public class Scene {
 	public void destroyInstance(Instance instance){
 		instances.remove(instance);
 		instance.onDestroy();
+		
+		instance = null;
 	}
 	
 	

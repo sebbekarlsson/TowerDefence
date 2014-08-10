@@ -1,15 +1,19 @@
 package nu.sebka.instances;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 
+
+
+import nu.sebka.main.Game;
 import nu.sebka.main.ImageLoader;
 import nu.sebka.main.Instance;
 
 public class House extends Instance {
 
 	public static double health = 100;
+	
+	boolean create = true;
 	
 	public House(double x, double y) {
 		super(x, y);
@@ -18,11 +22,10 @@ public class House extends Instance {
 	
 	public void draw(Graphics2D g2d){
 		drawSprite(g2d,sprite.getCurrentImage());
-		g2d.setColor(Color.black);
-		g2d.fillRect((int)x-4, (int)y-25, 32, 16);
-		g2d.setColor(Color.WHITE);
-		g2d.setFont(new Font(Font.SERIF,14,14));
-		g2d.drawString((int)health+"", (int)x-4, (int)y-12);
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect((int)x, (int)y-32, 32, 16);
+		g2d.setColor(Color.white);
+		g2d.drawString(health+"", (int)x, (int)y-16);
 	}
 
 	@Override
@@ -33,7 +36,9 @@ public class House extends Instance {
 
 	@Override
 	public void defaultTick() {
-		// TODO Auto-generated method stub
+		if(health < 1){
+			Game.sceneIndex = 0;
+		}
 		
 	}
 

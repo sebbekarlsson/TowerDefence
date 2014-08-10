@@ -8,6 +8,7 @@ public class SpiderMob extends Mob {
 	public SpiderMob(double x, double y) {
 		super(x, y);
 		sprite.images.add(ImageLoader.load("/images/mobs/spider/1.png"));
+		protection = 25;
 	}
 
 }

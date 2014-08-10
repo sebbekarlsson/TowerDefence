@@ -1,7 +1,7 @@
 package nu.sebka.instances;
 
 import nu.sebka.main.Instance;
-import nu.sebka.main.MouseHandler;
+
 
 public abstract class Entity extends Instance {
 

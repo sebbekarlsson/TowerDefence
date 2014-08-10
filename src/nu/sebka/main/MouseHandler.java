@@ -14,7 +14,7 @@ public class MouseHandler {
 	public static Cursor cursor;
 	
 	public static void draw(Graphics2D g2d){
-		
+	
 	}
 
 	public static void setMousePosition(int x, int y){

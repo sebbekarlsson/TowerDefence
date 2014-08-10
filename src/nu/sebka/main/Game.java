@@ -14,7 +14,10 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import nu.sebka.scenes.MenuScene;
 import nu.sebka.scenes.worlds.World0;
+import nu.sebka.scenes.worlds.World1;
+import nu.sebka.scenes.worlds.World2;
 
 public class Game extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 	private static final long serialVersionUID = 1L;
@@ -26,24 +29,32 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	public static final Dimension RENDERSIZE = new Dimension(FRAMESIZE.width, FRAMESIZE.height);
 
 	static JFrame frame = new JFrame();
-	
+
 	public static final BufferedImage offscreen = new BufferedImage(RENDERSIZE.width, RENDERSIZE.height, BufferedImage.TYPE_INT_RGB);
 
 	public final Thread gameLoop = new Thread(this);
-	
+
 	public static ArrayList<Scene> scenes = new ArrayList<Scene>();
 	public static int sceneIndex = 0;
 
+	public static char keychar = "|".charAt(0);
+	public static boolean keyDown = false;
 	public static boolean[] keys = new boolean[256];
 	public static boolean[] mkeys = new boolean[10];
-	
-	public static int money = 1500;
-	
+
+	public static int money = 100;
+	public static int kills = 0;
+
+	public static Instance boughtObject;
+
 
 	public Game(){
-		
+
+		scenes.add(new MenuScene());
 		scenes.add(new World0());
-		
+		scenes.add(new World1());
+		scenes.add(new World2());
+
 		frame.setSize(FRAMESIZE);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
@@ -53,9 +64,9 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		frame.addKeyListener(this);
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
-		
-		
-		
+
+
+
 		frame.add(this);
 	}
 
@@ -77,9 +88,11 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 			tick();
 			for(int i = 0; i < getCurrentScene().instances.size(); i++){
 				Instance instance = getCurrentScene().instances.get(i);
-				instance.tick();
-				instance.defaultTick();
-				
+				if(!Terminal.isOpen()){
+					instance.tick();
+					instance.defaultTick();
+				}
+
 			}
 
 			try {
@@ -95,29 +108,38 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 
 	public void tick(){
 		getCurrentScene().tick();
-		
+		getCurrentScene().defaultTick();
+
+		if(Terminal.isOpen()){
+			Terminal.tick();
+		}
+
 	}
 
 	public void paint(Graphics g){
-		
+
 		Graphics2D g2d = (Graphics2D) offscreen.getGraphics();
-		
-		
+
+
 		g2d.clearRect(0, 0, RENDERSIZE.width, RENDERSIZE.height);
 		Graphics2D GUI = (Graphics2D) g2d;
-		
+
 		getCurrentScene().draw(g2d);
-		
+
 		for(int i = 0; i < getCurrentScene().instances.size(); i++){
 			Instance instance = getCurrentScene().instances.get(i);
+			if(instance != null)
 			instance.draw(g2d);
 		}
-		
+
 		getCurrentScene().drawGUI(GUI);
+		if(Terminal.isOpen()){
+			Terminal.draw(GUI);
+		}
 		MouseHandler.draw(GUI);
-		
+
 		g.drawImage(offscreen, 0, 0, FRAMESIZE.width, FRAMESIZE.height, this);
-		
+
 		repaint();
 	}
 
@@ -155,22 +177,25 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	@Override
 	public void keyPressed(KeyEvent e) {
 		keys[e.getKeyCode()] = true;
+		keyDown = true;
 
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		keys[e.getKeyCode()] = false;
+		keychar = "|".charAt(0);
+		keyDown = false;
 
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		keychar = e.getKeyChar();
 
 	}
-	
-	
+
+
 	public static Scene getCurrentScene(){
 		return scenes.get(sceneIndex);
 	}
@@ -178,13 +203,13 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		MouseHandler.setMousePosition(e.getX(), e.getY());
-		
+
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		MouseHandler.setMousePosition(e.getX(), e.getY());
-		
+
 	}
 
 

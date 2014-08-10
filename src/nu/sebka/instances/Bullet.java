@@ -6,7 +6,7 @@ import nu.sebka.main.Game;
 
 public class Bullet extends Entity {
 	
-	public double damage = 10;
+	public double damage = 11;
 
 	public Bullet(double x, double y) {
 		super(x, y);

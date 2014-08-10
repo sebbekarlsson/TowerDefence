@@ -1,6 +1,6 @@
 package nu.sebka.instances.tiles;
 
-import java.awt.Graphics2D;
+
 
 import nu.sebka.instances.Tile;
 import nu.sebka.main.ImageLoader;
@@ -22,10 +22,7 @@ public class GrassTile extends Tile {
 		
 	}
 	
-	public void draw(Graphics2D g2d){
-		drawSprite(g2d,sprite.getCurrentImage());
-		drawHooverEffect(g2d);
-	}
+
 
 	@Override
 	public void onCreation() {

@@ -1,5 +1,6 @@
 package nu.sebka.instances.turrets;
 
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -13,7 +14,7 @@ import nu.sebka.main.Sprite;
 
 public abstract class Turret extends Entity {
 
-	protected Sprite head = new Sprite();
+	public Sprite head = new Sprite();
 	protected Random random = new Random();
 
 
@@ -22,6 +23,15 @@ public abstract class Turret extends Entity {
 		// TODO Auto-generated constructor stub
 	}
 
+	
+	
+
+	
+	
+	public void draw(Graphics2D g2d){
+		drawRotatedSprite(g2d,head.getCurrentImage(),direction);
+	}
+	
 	@Override
 	public void tick() {
 
@@ -116,8 +126,11 @@ public abstract class Turret extends Entity {
 
 		Bullet bullet = null;
 
-		if(this instanceof ArrowTurret){
-			bullet = new ArrowBullet(x,y);
+		if(this instanceof LaserTurret){
+			bullet = new LaserBullet(x,y);
+		}
+		else if(this instanceof WaterTurret){
+			bullet = new WaterBullet(x,y);
 		}
 
 		bullet.direction = dir;

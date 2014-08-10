@@ -1,9 +1,10 @@
 package nu.sebka.instances;
 
+
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Random;
 
-import nu.sebka.instances.mobs.SpiderMob;
 import nu.sebka.instances.mobs.ZombieMob;
 import nu.sebka.main.Game;
 import nu.sebka.main.ImageLoader;
@@ -12,7 +13,9 @@ import nu.sebka.main.Instance;
 public class MobSpawner extends Instance {
 
 	Random random = new Random();
-	boolean create = true;
+	public ArrayList<Mob> mobs = new ArrayList<Mob>();
+	public boolean canSpawn = false;
+
 
 	public MobSpawner(double x, double y) {
 		super(x, y);
@@ -23,19 +26,22 @@ public class MobSpawner extends Instance {
 
 	@Override
 	public void tick() {
-			
+
+		if(canSpawn){
+			if(mobs.size() > 0){
+				if(random.nextInt(20) == 0){
+					Game.getCurrentScene().createInstance(mobs.get(mobs.size()-1));
+					mobs.remove(mobs.size()-1);
+				}
+			}
+		}
+
 		if(Game.keys[KeyEvent.VK_ENTER]){
-			Game.getCurrentScene().createInstance(new SpiderMob(x,y));
+			Game.getCurrentScene().createInstance(new ZombieMob(x,y));
 			Game.keys[KeyEvent.VK_ENTER] = false;
 		}
-		
-		if(Game.keys[KeyEvent.VK_CONTROL]){
-			Game.getCurrentScene().createInstance(new ZombieMob(x,y));
-			Game.keys[KeyEvent.VK_CONTROL] = false;
-		}
 
 
-		
 
 	}
 
@@ -61,6 +67,10 @@ public class MobSpawner extends Instance {
 	public void onReplacement() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void setMobs(ArrayList<Mob> mobs){
+		this.mobs = mobs;
 	}
 
 }
