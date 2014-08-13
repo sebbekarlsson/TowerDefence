@@ -25,15 +25,19 @@ public abstract class Instance {
 		g2d.drawImage(image, (int)x, (int)y, null);
 	}
 
-	public void drawRotatedSprite(Graphics2D g2d,BufferedImage image,double dir){
+	public void drawRotatedSprite(Graphics2D g2d,BufferedImage image,double xx, double yy,double dir){
 
 		AffineTransform reset = new AffineTransform();
 		reset.rotate(0,0,0);
 		Graphics2D g2 = g2d;
-		g2.rotate(Math.toRadians(dir), x+image.getWidth()/2, y+image.getHeight()/2);
-		g2.drawImage(image, (int)x, (int)y, null);
+		g2.rotate(Math.toRadians(dir), x+sprite.getCurrentImage().getWidth()/2, y+sprite.getCurrentImage().getHeight()/2);
+		g2.drawImage(image, (int)xx, (int)yy, null);
 		g2.setTransform(reset);
 
+	}
+
+	public void drawScaledSprite(Graphics2D g2d, BufferedImage image, double xx, double yy, int width, int height){
+		g2d.drawImage(image, (int)xx, (int)yy, width, height, null);
 	}
 
 	public boolean isOutsideRoom(){
@@ -41,6 +45,17 @@ public abstract class Instance {
 		int h = Game.getCurrentScene().HEIGHT;
 
 		if(x < 0 || x > w || y < 0 || y > h){
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean isMouseOver(){
+		int mx = MouseHandler.getMousePosition().x;
+		int my = MouseHandler.getMousePosition().y;
+
+		if(mx >= x && mx <= x+sprite.getCurrentImage().getWidth() && my >= y && my <= y+sprite.getCurrentImage().getHeight()){
 			return true;
 		}
 

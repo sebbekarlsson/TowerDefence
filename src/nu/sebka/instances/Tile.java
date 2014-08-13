@@ -1,7 +1,9 @@
 package nu.sebka.instances;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
+
 
 
 
@@ -41,9 +43,13 @@ public abstract class Tile extends Instance {
 	}
 	public void drawHooverEffect(Graphics2D g2d){
 		if(MouseHandler.getMousePosition().x >= x && MouseHandler.getMousePosition().x <= x + 32 && MouseHandler.getMousePosition().y >= y && MouseHandler.getMousePosition().y <= y + 32){
-			g2d.setColor(Color.YELLOW);
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
+			g2d.setColor(Color.RED);
+			if(canBuild){
+				g2d.setColor(Color.GREEN);
+			}
 			g2d.fillRect((int)x, (int)y, 32, 32);
-			
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 			isSelected = true;
 		}else{
 			isSelected = false;

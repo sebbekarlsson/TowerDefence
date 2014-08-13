@@ -2,6 +2,7 @@ package nu.sebka.main;
 
 import java.awt.event.KeyEvent;
 
+import nu.sebka.instances.turrets.BlasterTurret;
 import nu.sebka.instances.turrets.LaserTurret;
 import nu.sebka.instances.turrets.Turret;
 import nu.sebka.instances.turrets.WaterTurret;
@@ -17,14 +18,21 @@ public class CommandReader {
 					Game.boughtObject = new LaserTurret(0,0);
 					Game.money -= PriceList.laserturret;
 					return false;
-				}else{Terminal.write("NOT ENOUGH MONEY");}
+				}else{Terminal.write("NOT ENOUGH MONEY"); return true;}
 			}
 			else if(args[1].equalsIgnoreCase("waterturret")){
 				if(Game.money >= PriceList.waterturret){
 					Game.boughtObject = new WaterTurret(0,0);
 					Game.money -= PriceList.waterturret;
 					return false;
-				}else{Terminal.write("NOT ENOUGH MONEY");}
+				}else{Terminal.write("NOT ENOUGH MONEY"); return true;}
+			}
+			else if(args[1].equalsIgnoreCase("blasterturret")){
+				if(Game.money >= PriceList.blasterturret){
+					Game.boughtObject = new BlasterTurret(0,0);
+					Game.money -= PriceList.blasterturret;
+					return false;
+				}else{Terminal.write("NOT ENOUGH MONEY"); return true;}
 			}
 		}
 		else if(args[0].equalsIgnoreCase("turrets")){

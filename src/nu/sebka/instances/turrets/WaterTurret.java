@@ -6,7 +6,7 @@ public class WaterTurret extends Turret {
 
 	public WaterTurret(double x, double y) {
 		super(x, y);
-		head.images.add(ImageLoader.load("/images/turrets/waterturret/head.png"));
+		sprite.images.add(ImageLoader.load("/images/turrets/waterturret/head.png"));
 	}
 
 }

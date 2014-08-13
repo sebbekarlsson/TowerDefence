@@ -10,7 +10,7 @@ public class LaserTurret extends Turret {
 	
 	public LaserTurret(double x, double y) {
 		super(x, y);
-		head.images.add(ImageLoader.load("/images/turrets/laserturret/head.png"));
+		sprite.images.add(ImageLoader.load("/images/turrets/laserturret/head.png"));
 		
 	}
 	

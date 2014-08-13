@@ -2,14 +2,21 @@ package nu.sebka.main;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import nu.sebka.instances.House;
 import nu.sebka.instances.MobSpawner;
 import nu.sebka.instances.PathPoint;
-import nu.sebka.instances.Tree;
-import nu.sebka.instances.tiles.DirtTile;
-import nu.sebka.instances.tiles.GrassTile;
-import nu.sebka.instances.tiles.GravelTile;
+import nu.sebka.instances.entities.Mob;
+import nu.sebka.instances.mobs.ShipMob;
+import nu.sebka.instances.mobs.SpiderMob;
+import nu.sebka.instances.mobs.ZombieMob;
+import nu.sebka.instances.tiles.BuildTile;
+import nu.sebka.instances.tiles.StoneTile;
 import nu.sebka.scenes.GameScene;
 
 public class MapLoader {
@@ -23,14 +30,12 @@ public class MapLoader {
 				int r = color.getRed();
 				int g = color.getGreen();
 				int b = color.getBlue();
-				
-				//System.out.println(r+" "+g+" "+b);
-				
-				if(r == 0 && g == 128 && b == 0){
-					scene.createInstance(new GrassTile(x*32,y*32));
+			
+				if(r == 140 && g == 140 && b == 140){
+					scene.createInstance(new StoneTile(x*32,y*32));
 				}
-				else if(r == 128 && g == 70 && b == 20){
-					scene.createInstance(new DirtTile(x*32,y*32));
+				else if(r == 80 && g == 190 && b == 200){
+					scene.createInstance(new BuildTile(x*32,y*32));
 				}
 				else if(r == 160 && g == 0 && b == 120){
 					MobSpawner ms = new MobSpawner(x*32,y*32);
@@ -45,17 +50,37 @@ public class MapLoader {
 					scene.house = h;
 					scene.createInstance(new House(x*32,y*32));
 				}
-				else if(r == 150 && g == 150 && b == 150){
-					scene.createInstance(new GravelTile(x*32,y*32));
-				}
-				else if(r == 0 && g == 80 && b == 40){
-					scene.createInstance(new Tree(x*32,y*32));
-				}
 				
 			}
 		}
 		
 		
+	}
+	
+	public static ArrayList<Mob> loadMobs(String file){
+		ArrayList<Mob> mobs = new ArrayList<Mob>();
+		try{
+		BufferedReader br = new BufferedReader(new InputStreamReader(MapLoader.class.getResourceAsStream(file)));
+		String line;
+		while ((line = br.readLine()) != null) {
+		   if(line.equalsIgnoreCase("zombie")){
+			   mobs.add(new ZombieMob(0,0));
+		   }
+		   else if(line.equalsIgnoreCase("spider")){
+			   mobs.add(new SpiderMob(0,0));
+		   }
+		   else if(line.equalsIgnoreCase("ship")){
+			   mobs.add(new ShipMob(0,0));
+		   }
+		   
+		}
+		br.close();
+		return mobs;
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	
 }

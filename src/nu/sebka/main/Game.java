@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import nu.sebka.main.gui.GUIObject;
 import nu.sebka.scenes.MenuScene;
 import nu.sebka.scenes.worlds.World0;
 import nu.sebka.scenes.worlds.World1;
@@ -42,7 +43,8 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	public static boolean[] keys = new boolean[256];
 	public static boolean[] mkeys = new boolean[10];
 
-	public static int money = 100;
+	public static int DEFAULT_MONEY = 180;
+	public static int money = DEFAULT_MONEY;
 	public static int kills = 0;
 
 	public static Instance boughtObject;
@@ -86,14 +88,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		while(true){
 
 			tick();
-			for(int i = 0; i < getCurrentScene().instances.size(); i++){
-				Instance instance = getCurrentScene().instances.get(i);
-				if(!Terminal.isOpen()){
-					instance.tick();
-					instance.defaultTick();
-				}
-
-			}
+			
 
 			try {
 				Thread.sleep(1000/60);
@@ -107,12 +102,30 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	}
 
 	public void tick(){
+		
+		for(int i = 0; i < getCurrentScene().instances.size(); i++){
+			Instance instance = getCurrentScene().instances.get(i);
+			if(!Terminal.isOpen()){
+				instance.tick();
+				instance.defaultTick();
+			}
+
+		}
+		
 		getCurrentScene().tick();
 		getCurrentScene().defaultTick();
 
+		
+		for(int i = 0; i < getCurrentScene().guiobjects.size(); i++){
+			GUIObject object = getCurrentScene().guiobjects.get(i);
+			object.tick();
+		}
+		
 		if(Terminal.isOpen()){
 			Terminal.tick();
 		}
+		
+		
 
 	}
 
@@ -138,6 +151,11 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		}
 		MouseHandler.draw(GUI);
 
+		for(int i = 0; i < getCurrentScene().guiobjects.size(); i++){
+			GUIObject object = getCurrentScene().guiobjects.get(i);
+			object.draw(GUI);
+		}
+		
 		g.drawImage(offscreen, 0, 0, FRAMESIZE.width, FRAMESIZE.height, this);
 
 		repaint();

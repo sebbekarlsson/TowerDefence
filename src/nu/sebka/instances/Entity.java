@@ -58,5 +58,14 @@ public abstract class Entity extends Instance {
 		direction = (float)Math.toDegrees(rot);
 		
 	}
+	
+	
+	public void lookAtInstance(Instance instance){
+		
+		
+		float rot = (float)Math.atan2((instance.y + instance.sprite.getCurrentImage().getHeight()/2) - y,(instance.x + instance.sprite.getCurrentImage().getWidth() / 2) - x);
+		direction = (float)Math.toDegrees(rot);
+		
+	}
 
 }

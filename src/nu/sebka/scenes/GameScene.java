@@ -8,17 +8,19 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
-import java.lang.reflect.InvocationTargetException;
+import java.util.Random;
 
 import nu.sebka.instances.House;
 import nu.sebka.instances.MobSpawner;
+import nu.sebka.instances.entities.BackgroundStar;
 import nu.sebka.instances.turrets.Turret;
 import nu.sebka.main.Game;
 import nu.sebka.main.ImageLoader;
 import nu.sebka.main.MouseHandler;
 import nu.sebka.main.Scene;
 import nu.sebka.main.Terminal;
-import nu.sebka.scenes.worlds.World0;
+import nu.sebka.main.gui.ShopWindow;
+
 
 public class GameScene extends Scene {
 	public House house;
@@ -26,38 +28,50 @@ public class GameScene extends Scene {
 	public int startTimer = 2060;
 	int mobs = 0;
 	boolean count = true;
+	boolean init = true;
+	
+	protected Random random = new Random();
+	
+	public static ShopWindow shopwindow = new ShopWindow();
 
+	public void init(){}
+	
+	
 
 	public void defaultTick(){
 		
-		if(Game.keys[KeyEvent.VK_R]){
-			Game.scenes.set(Game.sceneIndex, new LoadingScene(0){
-
-				@Override
-				public void onDone() {
-					try {
-						Scene scene = Game.getCurrentScene().getClass().newInstance();
-						Game.scenes.set(Game.sceneIndex,scene);
-					} catch (InstantiationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					
-					} catch (IllegalArgumentException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					
-					} catch (SecurityException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-				}});
+		if(shopwindow.isOpen()){
+			shopwindow.tick();
 		}
 		
+		if(init){
+			init();
+			init = false;
+		}
+	
+		
+		
+		if(!Terminal.isOpen()){
+
+			if(Game.keys[KeyEvent.VK_R]){
+				Game.scenes.set(Game.sceneIndex, new LoadingScene(16){
+
+					@Override
+					public void onDone() {
+						
+						Game.kills = 0;
+						Game.money = Game.DEFAULT_MONEY;
+						House.health = 100;
+						Game.sceneIndex = 0;
+
+
+					}});
+			}
+		}
+
 		if(count && mobspawner != null){
+			
+			House.health = 100;
 			mobs = mobspawner.mobs.size();
 			count = false;
 		}
@@ -77,33 +91,51 @@ public class GameScene extends Scene {
 			}else{
 				mobspawner.canSpawn = true;
 			}
+			
+			
+			if(Game.keys[KeyEvent.VK_B]){
+				if(shopwindow.isOpen()){
+					shopwindow.close();
+				}
+				else if(!shopwindow.isOpen()){
+					shopwindow.open();
+				}
+				
+				Game.keys[KeyEvent.VK_B] = false;
+			}
 		}
 		
+		
+
 		if(Game.kills >= mobs){
-			
+
 			Game.scenes.set(Game.sceneIndex, new LoadingScene(16){
 
 				@Override
 				public void onDone() {
-					
+
 					Game.kills = 0;
-					
+
 					if(Game.scenes.size() > Game.sceneIndex+1){
-					Game.sceneIndex += 1;
+						Game.sceneIndex += 1;
 					}else{
 						Game.sceneIndex = 0;
 					}
-					
+
 				}});
-			
-			
+
+
 		}
 	}
 
 
 	public void drawGUI(Graphics2D g2d){
 
-		if(!Terminal.isOpen()){
+		if(shopwindow.isOpen()){
+			shopwindow.draw(g2d);
+		}
+		
+		if(!Terminal.isOpen() && !shopwindow.isOpen()){
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
 			g2d.setColor(Color.black);
 			g2d.fillRect(0, 0, 100, 86);
@@ -141,14 +173,26 @@ public class GameScene extends Scene {
 
 		}
 
+		
+		
 
 		if(Game.boughtObject != null){
 			if(Game.boughtObject instanceof Turret){
 				Turret turret = (Turret) Game.boughtObject;
-				g2d.drawImage(turret.head.getCurrentImage(), MouseHandler.getMousePosition().x, MouseHandler.getMousePosition().y, null);
+				g2d.drawImage(turret.sprite.getCurrentImage(), MouseHandler.getMousePosition().x, MouseHandler.getMousePosition().y, null);
 			}else{
 				g2d.drawImage(Game.boughtObject.sprite.getCurrentImage(), MouseHandler.getMousePosition().x, MouseHandler.getMousePosition().y, null);
 			}
+		}
+	}
+
+
+	public void createStars(int stars){
+		
+		for(int i = 0; i < stars; i++){
+
+			BackgroundStar star = new BackgroundStar(random.nextInt(WIDTH),random.nextInt(HEIGHT));
+			instances.add(0, star);
 		}
 	}
 

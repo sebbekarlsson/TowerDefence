@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Random;
 
+import nu.sebka.instances.entities.Mob;
 import nu.sebka.instances.mobs.ZombieMob;
 import nu.sebka.main.Game;
 import nu.sebka.main.ImageLoader;
@@ -14,6 +15,7 @@ public class MobSpawner extends Instance {
 
 	Random random = new Random();
 	public ArrayList<Mob> mobs = new ArrayList<Mob>();
+	public int spawnTimer = 48;
 	public boolean canSpawn = false;
 
 
@@ -29,10 +31,18 @@ public class MobSpawner extends Instance {
 
 		if(canSpawn){
 			if(mobs.size() > 0){
-				if(random.nextInt(20) == 0){
-					Game.getCurrentScene().createInstance(mobs.get(mobs.size()-1));
-					mobs.remove(mobs.size()-1);
-				}
+				
+					if(spawnTimer > 0){
+						spawnTimer -= 1;
+					}else{
+						Mob mob = mobs.get(mobs.size()-1);
+						mob.x = x;
+						mob.y = y;
+						Game.getCurrentScene().createInstance(mob);
+						mobs.remove(mobs.size()-1);
+						spawnTimer = 48;
+					}
+				
 			}
 		}
 

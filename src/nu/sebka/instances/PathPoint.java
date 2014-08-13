@@ -7,7 +7,7 @@ import nu.sebka.main.Instance;
 
 public class PathPoint extends Instance {
 
-	boolean marked = false;
+	public boolean marked = false;
 	
 	public PathPoint(double x, double y) {
 		super(x, y);

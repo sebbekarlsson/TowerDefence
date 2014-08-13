@@ -3,14 +3,19 @@ package nu.sebka.main;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Random;
+
+import nu.sebka.main.gui.GUIObject;
 
 public class Scene {
 
-	int WIDTH = Game.RENDERSIZE.width;
-	int HEIGHT = Game.RENDERSIZE.height;
+	public int WIDTH = Game.RENDERSIZE.width;
+	public int HEIGHT = Game.RENDERSIZE.height;
 	public Dimension SCENESIZE = new Dimension(WIDTH,HEIGHT);
 	
 	public ArrayList<Instance> instances = new ArrayList<Instance>();
+	public ArrayList<GUIObject> guiobjects = new ArrayList<GUIObject>();
+	public Random random = new Random();
 	
 	
 	public void tick(){
@@ -50,6 +55,11 @@ public class Scene {
 		
 		instance = null;
 	}
+	
+	public void destroyGUIObject(GUIObject object){
+		guiobjects.remove(object);
+	}
+	
 	
 	
 	

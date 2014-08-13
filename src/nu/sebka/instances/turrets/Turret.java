@@ -1,37 +1,83 @@
 package nu.sebka.instances.turrets;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import nu.sebka.instances.Bullet;
 import nu.sebka.instances.Entity;
-import nu.sebka.instances.Mob;
+import nu.sebka.instances.entities.Bullet;
+import nu.sebka.instances.entities.Mob;
+import nu.sebka.instances.turrets.bullets.BlasterBullet;
+import nu.sebka.instances.turrets.bullets.LaserBullet;
+import nu.sebka.instances.turrets.bullets.MachineBullet;
+import nu.sebka.instances.turrets.bullets.WaterBullet;
 import nu.sebka.main.Game;
 import nu.sebka.main.Instance;
-import nu.sebka.main.Sprite;
+
+
 
 public abstract class Turret extends Entity {
 
-	public Sprite head = new Sprite();
+	
 	protected Random random = new Random();
+	public int radius = 128;
+	public int SHOOT_TIME = 10;
+	int shootTimer = SHOOT_TIME;
+	//public Sprite flash = new Sprite();
+	public boolean isShooting = false;
+	//public int animeTimer = 5;
 
 
 	public Turret(double x, double y) {
 		super(x, y);
-		// TODO Auto-generated constructor stub
+		//flash.images.add(ImageLoader.getFrames("/images/flash.gif").get(0));
 	}
 
-	
-	
 
-	
-	
+
+
+
+
 	public void draw(Graphics2D g2d){
-		drawRotatedSprite(g2d,head.getCurrentImage(),direction);
+		
+		
+		
+		if(isMouseOver()){
+			g2d.setColor(new Color(150,220,230));
+			
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
+			
+			g2d.fillOval((int)x-(radius/2)+sprite.getCurrentImage().getWidth()/2, (int)y-(radius/2)+sprite.getCurrentImage().getHeight()/2, radius, radius);
+			
+			g2d.setColor(Color.BLACK);
+			
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+			
+			g2d.drawOval((int)x-(radius/2)+sprite.getCurrentImage().getWidth()/2, (int)y-(radius/2)+sprite.getCurrentImage().getHeight()/2, radius, radius);
+		}
+		
+		drawRotatedSprite(g2d,sprite.getCurrentImage(),x,y,direction);
+		if(isShooting){
+			
+			//if(animeTimer > 0){
+				//animeTimer -= 1;
+				
+			//}else{
+				//drawRotatedSprite(g2d,flash.getCurrentImage(),x,y,direction);
+				//animeTimer = 5;
+			//}
+			
+		}
+
+
+		
+			
+		
 	}
-	
+
 	@Override
 	public void tick() {
 
@@ -42,14 +88,26 @@ public abstract class Turret extends Entity {
 	@Override
 	public void defaultTick() {
 
-		Mob m = getMobInRadius(128);
-		if(m != null){
-			lookAt(m.x,m.y);
-			if(random.nextInt(3) == 0){
-				shoot(direction,7);
-			}
-		}
 		
+		
+		
+		Mob m = getMobInRadius(radius);
+		if(m != null){
+			lookAtInstance(m);
+				if(shootTimer > 0){
+					shootTimer -= 1;
+					
+				}else{
+					isShooting = true;
+					shoot(direction,7);
+					shootTimer = SHOOT_TIME;
+				}
+				
+			
+		}else{
+			isShooting = false;
+		}
+
 
 
 	}
@@ -131,6 +189,12 @@ public abstract class Turret extends Entity {
 		}
 		else if(this instanceof WaterTurret){
 			bullet = new WaterBullet(x,y);
+		}
+		else if(this instanceof BlasterTurret){
+			bullet = new BlasterBullet(x,y);
+		}
+		else if(this instanceof MachineTurret){
+			bullet = new MachineBullet(x,y);
 		}
 
 		bullet.direction = dir;
