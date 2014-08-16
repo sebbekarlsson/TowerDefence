@@ -51,16 +51,19 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 
 	public static Instance boughtObject;
 
-
-	public Game(){
-
-		scenes.add(new MenuScene());
+	public void init(){
+		
 		scenes.add(new World0());
 		scenes.add(new World1());
 		scenes.add(new World2());
 		scenes.add(new World3());
 		scenes.add(new World4());
+	}
 
+	public Game(){
+
+		
+		scenes.add(new MenuScene());
 		frame.setSize(FRAMESIZE);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
@@ -79,6 +82,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	public static void main(String[] args){
 		Game game = new Game();
 		game.start();
+		game.init();
 	}
 
 	public void start(){
