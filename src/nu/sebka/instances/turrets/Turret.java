@@ -11,6 +11,7 @@ import nu.sebka.instances.Entity;
 import nu.sebka.instances.entities.Bullet;
 import nu.sebka.instances.entities.Mob;
 import nu.sebka.instances.turrets.bullets.BlasterBullet;
+import nu.sebka.instances.turrets.bullets.FireBullet;
 import nu.sebka.instances.turrets.bullets.LaserBullet;
 import nu.sebka.instances.turrets.bullets.MachineBullet;
 import nu.sebka.instances.turrets.bullets.WaterBullet;
@@ -195,6 +196,9 @@ public abstract class Turret extends Entity {
 		}
 		else if(this instanceof MachineTurret){
 			bullet = new MachineBullet(x,y);
+		}
+		else if(this instanceof FireTurret){
+			bullet = new FireBullet(x,y);
 		}
 
 		bullet.direction = dir;

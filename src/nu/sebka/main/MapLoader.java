@@ -3,7 +3,6 @@ package nu.sebka.main;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;

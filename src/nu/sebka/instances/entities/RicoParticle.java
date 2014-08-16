@@ -3,8 +3,6 @@ package nu.sebka.instances.entities;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import nu.sebka.instances.Particle;
-
 public class RicoParticle extends Particle {
 
 	public RicoParticle(double x, double y) {

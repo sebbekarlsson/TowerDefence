@@ -9,6 +9,7 @@ public abstract class Entity extends Instance {
 	public float direction = 0;
 	public double health = 100;
 	
+	
 	public Entity(double x, double y) {
 		super(x, y);
 		// TODO Auto-generated constructor stub

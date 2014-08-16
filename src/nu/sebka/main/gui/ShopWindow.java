@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import nu.sebka.instances.turrets.BlasterTurret;
+import nu.sebka.instances.turrets.FireTurret;
 import nu.sebka.instances.turrets.LaserTurret;
 import nu.sebka.instances.turrets.MachineTurret;
 import nu.sebka.instances.turrets.WaterTurret;
@@ -22,6 +23,7 @@ public class ShopWindow extends GUIObject {
 	GameButton laserturretbutton;
 	GameButton waterturretbutton;
 	GameButton machineturretbutton;
+	GameButton fireturretbutton;
 	
 	
 
@@ -110,6 +112,25 @@ public class ShopWindow extends GUIObject {
 			}
 
 		};
+		
+		
+		fireturretbutton = new GameButton(x+160, y+184, ImageLoader.load("/images/gui/button_small.png"), "Buy "+PriceList.fireturret){
+
+			@Override
+			public void onPress() {
+				
+				if(Game.money >= PriceList.fireturret){
+					Game.boughtObject = new FireTurret(0,0);
+					Game.money -= PriceList.fireturret;
+					close();
+				}else{
+					close();
+					Game.getCurrentScene().guiobjects.add(new ConfirmWindow("Not enough money"));
+				}
+
+			}
+
+		};
 
 	}
 
@@ -120,6 +141,7 @@ public class ShopWindow extends GUIObject {
 			laserturretbutton.tick();
 			waterturretbutton.tick();
 			machineturretbutton.tick();
+			fireturretbutton.tick();
 		}
 		
 		
@@ -153,6 +175,11 @@ public class ShopWindow extends GUIObject {
 			machineturretbutton.draw(g2d);
 			g2d.drawImage(ImageLoader.load("/images/turrets/machineturret/head.png"), (int)x+172, (int)y+64, null);
 			g2d.drawString("Machine Turret", (int)x+160, (int)y+64);
+			
+			
+			fireturretbutton.draw(g2d);
+			g2d.drawImage(ImageLoader.load("/images/turrets/fireturret/head.png"), (int)x+172, (int)y+160, null);
+			g2d.drawString("Fire Turret", (int)x+160, (int)y+160);
 		}
 		
 		

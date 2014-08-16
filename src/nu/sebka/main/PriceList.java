@@ -6,4 +6,5 @@ public class PriceList {
 	public static int waterturret = 35;
 	public static int blasterturret = 120;
 	public static int machineturret = 200;
+	public static int fireturret = 500;
 }

@@ -11,36 +11,37 @@ import nu.sebka.instances.Entity;
 import nu.sebka.instances.House;
 import nu.sebka.instances.PathPoint;
 import nu.sebka.instances.turrets.bullets.BlasterBullet;
+import nu.sebka.instances.turrets.bullets.FireBullet;
 import nu.sebka.instances.turrets.bullets.MachineBullet;
 import nu.sebka.main.Game;
+import nu.sebka.main.ImageLoader;
 import nu.sebka.main.Instance;
+import nu.sebka.main.Sprite;
 
 public class Mob extends Entity {
 
 
-
+	Random random = new Random();
 
 	ArrayList<PathPoint> points = new ArrayList<PathPoint>();
 	PathPoint nearestPoint = null;
 	boolean getPoints = true;
+	double imgdir = 0;
 
 	public double protection = 10;
 	public int moneyGain = 10;
+	boolean isOnFire = false;
 
-	double imgdir = 0;
-	Random random = new Random();
-
-
-
-
+	Sprite fireSprite = new Sprite();
 
 	public Mob(double x, double y) {
 		super(x, y);
 		health = 100;
+		fireSprite.images.add(ImageLoader.load("/images/fire.png"));
 	}
 
 	public void onDestroy(){
-
+		Game.getCurrentScene().createInstance(new Blood(x,y));
 	}
 
 	public void defaultTick(){
@@ -156,6 +157,9 @@ public class Mob extends Entity {
 
 						}
 					}
+					else if(b instanceof FireBullet){
+						isOnFire = true;
+					}
 
 					Game.getCurrentScene().destroyInstance(b);
 				}
@@ -172,6 +176,14 @@ public class Mob extends Entity {
 			die();
 		}
 
+		if(isOnFire()){
+			if(protection > 0){
+				health -= 1/protection;
+			}else{
+				health -= 0.5;
+			}
+		}
+
 
 
 	}
@@ -184,6 +196,9 @@ public class Mob extends Entity {
 		}
 		drawRotatedSprite(g2d,sprite.getCurrentImage(),x,y,imgdir);
 
+		if(isOnFire()){
+			g2d.drawImage(fireSprite.getCurrentImage(), (int)x, (int)y, null);
+		}
 
 		g2d.setColor(Color.black);
 		g2d.fillRect((int)x-4, (int)y-52, 32, 32);
@@ -192,6 +207,8 @@ public class Mob extends Entity {
 		g2d.drawString((int)health+"", (int)x-4, (int)y-37);
 		g2d.setColor(Color.blue);
 		g2d.drawString((int)protection+"", (int)x-4, (int)y-24);
+
+
 
 
 	}
@@ -221,6 +238,10 @@ public class Mob extends Entity {
 
 
 		return null;
+	}
+
+	public boolean isOnFire(){
+		return isOnFire;
 	}
 
 }

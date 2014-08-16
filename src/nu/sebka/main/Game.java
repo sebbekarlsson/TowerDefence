@@ -19,6 +19,8 @@ import nu.sebka.scenes.MenuScene;
 import nu.sebka.scenes.worlds.World0;
 import nu.sebka.scenes.worlds.World1;
 import nu.sebka.scenes.worlds.World2;
+import nu.sebka.scenes.worlds.World3;
+import nu.sebka.scenes.worlds.World4;
 
 public class Game extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 	private static final long serialVersionUID = 1L;
@@ -56,6 +58,8 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		scenes.add(new World0());
 		scenes.add(new World1());
 		scenes.add(new World2());
+		scenes.add(new World3());
+		scenes.add(new World4());
 
 		frame.setSize(FRAMESIZE);
 		frame.setResizable(false);
