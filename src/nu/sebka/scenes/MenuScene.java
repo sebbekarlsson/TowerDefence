@@ -18,16 +18,17 @@ public class MenuScene extends Scene {
 
 			@Override
 			public void onPress() {
-				Game.scenes.set(1, new LoadingScene(0){
+				
 
-					@Override
-					public void onDone() {
-						Game.scenes.set(1, new World0());
+					
+				Game.scenes.set(1, new World0());
 						
-					}});
+					
 				Game.sceneIndex += 1;
 				
-			}};
+			}
+		};
+		
 			
 		exitbutton = new GameButton(Game.RENDERSIZE.width/2-(194/2),120+86,ImageLoader.load("/images/gui/button.png"),"Exit"){
 
@@ -35,7 +36,8 @@ public class MenuScene extends Scene {
 			public void onPress() {
 				System.exit(0);
 				
-			}};
+			}
+		};
 	}
 	
 	public void tick(){

@@ -51,19 +51,18 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 
 	public static Instance boughtObject;
 
-	public void init(){
-		
+
+
+	public Game(){
+
+
+		scenes.add(new MenuScene());
 		scenes.add(new World0());
 		scenes.add(new World1());
 		scenes.add(new World2());
 		scenes.add(new World3());
 		scenes.add(new World4());
-	}
 
-	public Game(){
-
-		
-		scenes.add(new MenuScene());
 		frame.setSize(FRAMESIZE);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
@@ -77,16 +76,23 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 
 
 		frame.add(this);
+
+
+
+
 	}
 
 	public static void main(String[] args){
 		Game game = new Game();
+		
+		
 		game.start();
-		game.init();
+
 	}
 
 	public void start(){
 		gameLoop.start();
+
 	}
 
 
@@ -95,8 +101,9 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 
 		while(true){
 
-			tick();
-			
+			if(scenes.size() > 0){
+				tick();
+			}
 
 			try {
 				Thread.sleep(1000/60);
@@ -110,7 +117,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	}
 
 	public void tick(){
-		
+
 		for(int i = 0; i < getCurrentScene().instances.size(); i++){
 			Instance instance = getCurrentScene().instances.get(i);
 			if(!Terminal.isOpen()){
@@ -119,54 +126,58 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 			}
 
 		}
-		
+
 		getCurrentScene().tick();
 		getCurrentScene().defaultTick();
 
-		
+
 		for(int i = 0; i < getCurrentScene().guiobjects.size(); i++){
 			GUIObject object = getCurrentScene().guiobjects.get(i);
 			object.tick();
+			
 		}
-		
+
 		if(Terminal.isOpen()){
 			Terminal.tick();
 		}
-		
-		
+
+
 
 	}
 
 	public void paint(Graphics g){
 
-		Graphics2D g2d = (Graphics2D) offscreen.getGraphics();
+
+		if(scenes.size() > 0){
+			Graphics2D g2d = (Graphics2D) offscreen.getGraphics();
 
 
-		g2d.clearRect(0, 0, RENDERSIZE.width, RENDERSIZE.height);
-		Graphics2D GUI = (Graphics2D) g2d;
+			g2d.clearRect(0, 0, RENDERSIZE.width, RENDERSIZE.height);
+			Graphics2D GUI = (Graphics2D) g2d;
 
-		getCurrentScene().draw(g2d);
+			getCurrentScene().draw(g2d);
 
-		for(int i = 0; i < getCurrentScene().instances.size(); i++){
-			Instance instance = getCurrentScene().instances.get(i);
-			if(instance != null)
-			instance.draw(g2d);
+			for(int i = 0; i < getCurrentScene().instances.size(); i++){
+				Instance instance = getCurrentScene().instances.get(i);
+				if(instance != null)
+					instance.draw(g2d);
+			}
+
+			getCurrentScene().drawGUI(GUI);
+			if(Terminal.isOpen()){
+				Terminal.draw(GUI);
+			}
+			MouseHandler.draw(GUI);
+
+			for(int i = 0; i < getCurrentScene().guiobjects.size(); i++){
+				GUIObject object = getCurrentScene().guiobjects.get(i);
+				object.draw(GUI);
+			}
+
+			g.drawImage(offscreen, 0, 0, FRAMESIZE.width, FRAMESIZE.height, this);
+
+			repaint();
 		}
-
-		getCurrentScene().drawGUI(GUI);
-		if(Terminal.isOpen()){
-			Terminal.draw(GUI);
-		}
-		MouseHandler.draw(GUI);
-
-		for(int i = 0; i < getCurrentScene().guiobjects.size(); i++){
-			GUIObject object = getCurrentScene().guiobjects.get(i);
-			object.draw(GUI);
-		}
-		
-		g.drawImage(offscreen, 0, 0, FRAMESIZE.width, FRAMESIZE.height, this);
-
-		repaint();
 	}
 
 

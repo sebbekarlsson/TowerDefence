@@ -19,8 +19,8 @@ public class FireBullet extends Bullet {
 	}
 	
 	public void tick(){
-		if(random.nextInt(3) == 0){
-			for(int i = 0; i < random.nextInt(18); i++){
+		if(random.nextInt(5) == 0){
+			for(int i = 0; i < random.nextInt(10); i++){
 				FireParticle particle = new FireParticle(x,y);
 				particle.speed = random.nextInt(2)+1;
 				particle.direction = random.nextInt(360);

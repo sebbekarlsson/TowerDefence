@@ -10,7 +10,7 @@ import nu.sebka.scenes.GameScene;
 
 public class World1 extends GameScene {
 
-	public World1(){
+	public void init(){
 		createStars(32);
 		MouseHandler.setCursor(ImageLoader.load("/images/gui/cursor.png"));
 		MapLoader.loadMap(this, ImageLoader.load("/images/maps/2/map.png"));

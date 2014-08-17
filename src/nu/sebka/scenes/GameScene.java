@@ -19,6 +19,7 @@ import nu.sebka.main.ImageLoader;
 import nu.sebka.main.MouseHandler;
 import nu.sebka.main.Scene;
 import nu.sebka.main.Terminal;
+import nu.sebka.main.gui.LoadingScreen;
 import nu.sebka.main.gui.ShopWindow;
 
 
@@ -29,103 +30,102 @@ public class GameScene extends Scene {
 	int mobs = 0;
 	boolean count = true;
 	boolean init = true;
-	
+
 	protected Random random = new Random();
-	
+
 	public static ShopWindow shopwindow = new ShopWindow();
 
 	public void init(){}
-	
-	
+
+
 
 	public void defaultTick(){
-		
+
 		if(shopwindow.isOpen()){
 			shopwindow.tick();
 		}
-		
+
 		if(init){
+			Game.getCurrentScene().guiobjects.add(new LoadingScreen(0));
 			init();
 			init = false;
 		}
-	
-		
-		
+
+
+
 		if(!Terminal.isOpen()){
 
 			if(Game.keys[KeyEvent.VK_R]){
-				Game.scenes.set(Game.sceneIndex, new LoadingScene(16){
-
-					@Override
-					public void onDone() {
-						
-						Game.kills = 0;
-						Game.money = Game.DEFAULT_MONEY;
-						House.health = 100;
-						Game.sceneIndex = 0;
 
 
-					}});
+
+
+				Game.kills = 0;
+				Game.money = Game.DEFAULT_MONEY;
+				House.health = 100;
+				Game.sceneIndex = 0;
+
+
+
 			}
-		}
 
-		if(count && mobspawner != null){
-			
-			House.health = 100;
-			mobs = mobspawner.mobs.size();
-			count = false;
-		}
+			if(count && mobspawner != null){
 
-		if(Game.keys[KeyEvent.VK_CONTROL]){
-			if(Terminal.isOpen()){
-				Terminal.close();
-			}else{
-				Terminal.open();
+				House.health = 100;
+				mobs = mobspawner.mobs.size();
+				count = false;
 			}
-			Game.keys[KeyEvent.VK_CONTROL] = false;
-		}
 
-		if(!Terminal.isOpen()){
-			if(startTimer > 0){
-				startTimer -= 1;
-			}else{
-				mobspawner.canSpawn = true;
-			}
-			
-			
-			if(Game.keys[KeyEvent.VK_B]){
-				if(shopwindow.isOpen()){
-					shopwindow.close();
+			if(Game.keys[KeyEvent.VK_CONTROL]){
+				if(Terminal.isOpen()){
+					Terminal.close();
+				}else{
+					Terminal.open();
 				}
-				else if(!shopwindow.isOpen()){
-					shopwindow.open();
-				}
-				
-				Game.keys[KeyEvent.VK_B] = false;
+				Game.keys[KeyEvent.VK_CONTROL] = false;
 			}
-		}
-		
-		
 
-		if(Game.kills >= mobs){
+			if(!Terminal.isOpen()){
+				if(startTimer > 0){
+					startTimer -= 1;
+				}else{
+					mobspawner.canSpawn = true;
+				}
 
-			Game.scenes.set(Game.sceneIndex, new LoadingScene(16){
 
-				@Override
-				public void onDone() {
-
-					Game.kills = 0;
-
-					if(Game.scenes.size() > Game.sceneIndex+1){
-						Game.sceneIndex += 1;
-					}else{
-						Game.sceneIndex = 0;
+				if(Game.keys[KeyEvent.VK_B]){
+					if(shopwindow.isOpen()){
+						shopwindow.close();
+					}
+					else if(!shopwindow.isOpen()){
+						shopwindow.open();
 					}
 
-				}});
+					Game.keys[KeyEvent.VK_B] = false;
+				}
+			}
 
 
+
+			if(Game.kills >= mobs){
+
+
+
+
+
+				Game.kills = 0;
+
+				if(Game.scenes.size() > Game.sceneIndex+1){
+					Game.sceneIndex += 1;
+				}else{
+					Game.sceneIndex = 0;
+				}
+
+			}
 		}
+
+
+
 	}
 
 
@@ -134,7 +134,7 @@ public class GameScene extends Scene {
 		if(shopwindow.isOpen()){
 			shopwindow.draw(g2d);
 		}
-		
+
 		if(!Terminal.isOpen() && !shopwindow.isOpen()){
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
 			g2d.setColor(Color.black);
@@ -165,7 +165,7 @@ public class GameScene extends Scene {
 
 			g2d.setColor(Color.WHITE);
 			g2d.setFont(new Font(Font.SERIF,14,14));
-			g2d.drawString("Press 'CTRL' to open terminal.", 4, Game.RENDERSIZE.height-36);
+			g2d.drawString("Press 'B' to open the shop.", 4, Game.RENDERSIZE.height-36);
 
 
 
@@ -173,8 +173,8 @@ public class GameScene extends Scene {
 
 		}
 
-		
-		
+
+
 
 		if(Game.boughtObject != null){
 			if(Game.boughtObject instanceof Turret){
@@ -188,7 +188,7 @@ public class GameScene extends Scene {
 
 
 	public void createStars(int stars){
-		
+
 		for(int i = 0; i < stars; i++){
 
 			BackgroundStar star = new BackgroundStar(random.nextInt(WIDTH),random.nextInt(HEIGHT));
